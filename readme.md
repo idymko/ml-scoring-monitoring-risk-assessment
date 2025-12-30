@@ -124,3 +124,63 @@ Now that you have a single pandas DataFrame containing all of your data, you nee
 For later steps in the project, you'll need to have a record of which files you read to create your finaldata.csv dataset. You need to create a record of all of the files you read in this step, and save the record on your workspace as a Python list.
 
 You can store this record in a file called ingestedfiles.txt. This file should contain a list of the filenames of every .csv you've read in your ingestion.py script. You can also save this file to the directory that's specified in the output_folder_path entry of your config.json configuration file.
+
+
+# Step 2: Training, Scoring, and Deploying an ML Model
+
+Training and Scoring an ML model is important because ML models are only worth deploying if they've been trained, and we're always interested in re-training in the hope that we can improve our model accuracy. Re-training and scoring, as we'll do in this step, are crucial so we can get the highest possible model accuracy.
+
+This step will require you to write three scripts. One script will be for training an ML model, another will be for generating scoring metrics for the model, and the third will be for deploying the trained model.
+
+## Starter Files
+
+There are three Python template files that you should use for this step. All are in your collection of starter files:
+
+    training.py, a Python script that will accomplish model training
+    scoring.py, a Python script that will accomplish model scoring
+    deployment.py, a Python script that will accomplish model deployment
+
+For this step, you will also need finaldata.csv, one of the outputs of Step 1. The data in finaldata.csv represents records of corporations, their characteristics, and their historical attrition records. One row represents a hypothetical corporation. There are five columns in the dataset:
+
+    "corporation", which contains four-character abbreviations for names of corporations
+    "lastmonth_activity", which contains the level of activity associated with each corporation over the previous month
+    "lastyear_activity", which contains the level of activity associated with each corporation over the previous year
+    "number_of_employees", which contains the number of employees who work for the corporation
+    "exited", which contains a record of whether the corporation exited their contract (1 indicates that the corporation exited, and 0 indicates that the corporation did not exit)
+
+The dataset's final column, "exited", is the target variable for our predictions. The first column, "corporation", will not be used in modeling. The other three numeric columns will all be used as predictors in your ML model.
+
+The directories where you will read and write your files are stored in the config.json file, which is also included in your starter files.
+
+## Model Training
+
+Build a function that accomplishes model training for an attrition risk assessment ML model. Your model training function should accomplish the following:
+
+    Read in finaldata.csv using the pandas module. The directory that you read from is specified in the output_folder_path of your config.json starter file.
+    Use the scikit-learn module to train an ML model on your data. The training.py starter file already contains a logistic regression model you should use for training.
+    Write the trained model to your workspace, in a file called trainedmodel.pkl. The directory you'll save it in is specified in the output_model_path entry of your config.json starter file.
+
+You can write code that will accomplish all of these steps in training.py, which is included in your starter files.
+
+Note: this step is for you to have a trained model you can monitor and update later on and it's not about getting perfect model accuracy. So you don't need to spend a lot of time on improving the accuracy. It's good enough as long as you have an ML model that can make predictions.
+
+## Model Scoring
+
+You need to write a function that accomplishes model scoring. You can write this function in the starter file called scoring.py. To accomplish model scoring, you need to do the following:
+
+    Read in test data from the directory specified in the test_data_path of your config.json file
+    Read in your trained ML model from the directory specified in the output_model_path entry of your config.json file
+    Calculate the F1 score of your trained model on your testing data
+    Write the F1 score to a file in your workspace called latestscore.txt. You should save this file to the directory specified in the output_model_path entry of your config.json file
+
+The F1 score is a single number, and it doesn't need to have any special formatting. An example of the contents of latestscore.txt could be the following:
+
+0.6352419
+
+You can write code that will accomplish all of these steps in scoring.py, which is included in your starter files.
+
+## Model Deployment
+
+Finally, you need to write a function that will deploy your model. You can write this function in the starter file called deployment.py.
+
+Your model deployment function will not create new files; it will only copy existing files. It will copy your trained model (trainedmodel.pkl), your model score (latestscore.txt), and a record of your ingested data (ingestedfiles.txt). It will copy all three of these files from their original locations to a production deployment directory. The location of the production deployment directory is specified in the prod_deployment_path entry of your config.json starter file.

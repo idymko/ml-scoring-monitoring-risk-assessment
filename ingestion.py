@@ -5,14 +5,10 @@ import json
 from datetime import datetime
 
 #############Function for data ingestion
-def merge_multiple_dataframe(config_file = None):
+def merge_multiple_dataframe():
     
-    
-    #############Load config.json and get input and output paths
-    if config_file == None:
-        config_file = 'config.json'
-        
-    with open(config_file,'r') as f:
+    #############Load config.json and get input and output paths    
+    with open('config.json','r') as f:
         config = json.load(f) 
 
     input_folder_path = config['input_folder_path']
@@ -36,7 +32,7 @@ def merge_multiple_dataframe(config_file = None):
                 data = pd.concat([data, current_data], ignore_index=True)        
     
     # drop duplicates
-    data.drop_duplicates().reset_index(drop=True)
+    data = data.drop_duplicates().reset_index(drop=True)
     
     # save to dataframe to csv file
     filepath = output_folder_path + '/finaldata.csv'
