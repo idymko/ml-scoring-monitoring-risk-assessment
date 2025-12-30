@@ -48,26 +48,79 @@ There are many files in the starter: 10 Python scripts, one configuration file, 
 
 The following are the Python files that are in the starter files:
 
-* training.py, a Python script meant to train an ML model
-* scoring.py, a Python script meant to score an ML model
-* deployment.py, a Python script meant to deploy a trained ML model
-* ingestion.py, a Python script meant to ingest new data
-* diagnostics.py, a Python script meant to measure model and data diagnostics
-* reporting.py, a Python script meant to generate reports about model metrics
-* app.py, a Python script meant to contain API endpoints
-* wsgi.py, a Python script to help with API deployment
-* apicalls.py, a Python script meant to call your API endpoints
-* fullprocess.py, a script meant to determine whether a model needs to be re-deployed, and to call all other Python scripts when needed
+* `training.py`, a Python script meant to train an ML model
+* `scoring.py`, a Python script meant to score an ML model
+* `deployment.py`, a Python script meant to deploy a trained ML model
+* `ingestion.py`, a Python script meant to ingest new data
+* `diagnostics.py`, a Python script meant to measure model and data diagnostics
+* `reporting.py`, a Python script meant to generate reports about model metrics
+* `app.py`, a Python script meant to contain API endpoints
+* `wsgi.py`, a Python script to help with API deployment
+* `apicalls.py`, a Python script meant to call your API endpoints
+* `fullprocess.py`, a script meant to determine whether a model needs to be re-deployed, and to call all other Python scripts when needed
 
 The following are the datasets that are included in your starter files. Each of them is fabricated datasets that have information about hypothetical corporations.
 
 **Note**: these data have been uploaded to your workspace as well
 
-* dataset1.csv and dataset2.csv, found in /practicedata/
-* dataset3.csv and dataset4.csv, found in /sourcedata/
-* testdata.csv, found in /testdata/
+* `dataset1.csv` and `dataset2.csv`, found in `/practicedata/`
+* `dataset3.csv` and `dataset4.csv`, found in `/sourcedata/`
+* `testdata.csv`, found in `/testdata/`
 
 The following are other files that are included in your starter files:
 
 * `requirements.txt`, a text file and records the current versions of all the modules that your scripts use
 * `config.json`, a data file that contains names of files that will be used for configuration of your ML Python scripts
+
+# Step 1: Data Ingestion
+
+Data ingestion is important because all ML models require datasets for training. Instead of using a single, static dataset, you're going to create a script that's flexible enough to work with constantly changing sets of input files. This step will make your data ingestion go smoothly and easily, even if the data itself is complex.
+
+In this step, you'll read data files into Python, and write them to an output file that will be your master dataset. You'll also save a record of the files you've read.
+
+## Starter Files
+
+For this step, you'll be working with the starter file called ingestion.py as a template for your Python code.
+
+You'll also be working with the config.json configuration file, and the two datasets (dataset1.csv and dataset2.csv) found in /practicedata/.
+
+## Environment Setup (conda example)
+* `conda create -n mlproject "python=3.11.14"` (to remove: `rm -rf mlproject`)
+* `conda activate mlproject`
+* `pip install -r requirements.txt`
+
+## Using config.json Correctly
+
+It's important to understand your config.json starter file since you'll be using it throughout the project. This file contains configuration settings for your project.
+
+This file contains five entries:
+
+* input_folder_path, which specifies the location where your project will look for input data, to ingest, and to use in model training. If you change the value of input_folder_path, your project will use a different directory as its data source, and that could change the outcome of every step.
+* output_folder_path, which specifies the location to store output files related to data ingestion. In the starter version of config.json, this is equal to /ingesteddata/, which is the directory where you'll save your ingested data later in this step.
+* test_data_path, which specifies the location of the test dataset
+* output_model_path, which specifies the location to store the trained models and scores.
+* prod_deployment_path, which specifies the location to store the models in production.
+
+When we're initially setting up the project, our config.json file will be set to read practicedata and write ****practicemodels**. **When we're ready to finish the project, you will need to change the locations specified in config.json so that we're reading our actual, sourcedata and we're writing to our models directory.
+
+## Reading Data and Compiling a Dataset
+
+In the first part of your data ingestion.py script, you'll read a collection of csv files into Python.
+
+The location of the csv files you'll be working with is specified in the config.json starter file, in an entry called input_folder_path. In your starter version of config.py, this entry's value is set to the /practicedata/ directory.
+
+You need to add code to your ingestion.py starter file so that it can automatically detect all of the csv files in the directory specified in the input_folder_path. Each of the files in the input_folder_path represents a different dataset. You'll need to combine the data in all of these individual datasets into a single pandas DataFrame.
+
+You shouldn't manually write file names in your script: your script needs to automatically detect every file name in the directory. Your script should work even if we change the number of files or the file names in the input_folder_path.
+
+It's possible that some of the datasets that you read and combine will contain duplicate rows. So, you should de-dupe the single pandas DataFrame you create, and ensure that it only contains unique rows.
+
+## Writing the Dataset
+
+Now that you have a single pandas DataFrame containing all of your data, you need to write that dataset to storage in your workspace. You can save it to a file called finaldata.csv. Save this file to the directory that's specified in the output_folder_path entry of your config.json configuration file. In your starter version of config.json, the output_folder_path entry is set to /ingesteddata/, so your dataset will be saved to /ingesteddata/.
+
+## Saving a Record of the Ingestion
+
+For later steps in the project, you'll need to have a record of which files you read to create your finaldata.csv dataset. You need to create a record of all of the files you read in this step, and save the record on your workspace as a Python list.
+
+You can store this record in a file called ingestedfiles.txt. This file should contain a list of the filenames of every .csv you've read in your ingestion.py script. You can also save this file to the directory that's specified in the output_folder_path entry of your config.json configuration file.
