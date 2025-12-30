@@ -20,13 +20,13 @@ def score_model():
     model_path = os.path.join(config['output_model_path']) 
     test_data_path = os.path.join(config['test_data_path']) 
     
-    model = pickle.load(open(model_path + '/trainedmodel.pkl', 'rb'))
-    X = pd.read_csv(test_data_path + '/testdata.csv', index_col=0)
+    model = pickle.load(open(os.path.join(model_path, 'trainedmodel.pkl'), 'rb'))
+    X = pd.read_csv(os.path.join(test_data_path, 'testdata.csv'), index_col=0)
     y = X.pop("exited")
     preds = model.predict(X)
     f1score = metrics.f1_score(y,preds)
     
-    with open(model_path + "/latestscore.txt", 'w') as file:
+    with open(os.path.join(model_path, "latestscore.txt"), 'w') as file:
         file.write(str(f1score))
 
 if __name__ == '__main__':

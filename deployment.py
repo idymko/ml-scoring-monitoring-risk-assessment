@@ -24,22 +24,19 @@ def store_model_into_pickle():
 
     model_path = os.path.join(config['output_model_path']) 
     dataset_csv_path = os.path.join(config['output_folder_path']) 
-    prod_deployment_path = os.path.join(config['prod_deployment_path'])         
+    prod_deployment_path = os.path.join(config['prod_deployment_path'])
         
     # copy model
-    copy_file(model_path + '/trainedmodel.pkl', prod_deployment_path + '/trainedmodel.pkl')
-    # model = pickle.load(open(model_path + '/trainedmodel.pkl', 'rb'))
-    # pickle.dump(model, open(prod_deployment_path + '/trainedmodel.pkl', 'wb'))
+    copy_file(os.path.join(model_path, 'trainedmodel.pkl'), 
+              os.path.join(prod_deployment_path, 'trainedmodel.pkl'))
 
     # copy latestscore.txt
-    copy_file(model_path + '/latestscore.txt', prod_deployment_path + '/latestscore.txt')
-    # with open(model_path + '/latestscore.txt', 'rb') as src, open(prod_deployment_path + '/latestscore.txt', 'wb') as dest:
-    #     dest.write(src.read())
+    copy_file(os.path.join(model_path, 'latestscore.txt'), 
+              os.path.join(prod_deployment_path, 'latestscore.txt'))
         
     # copy ingestedfiles.txt
-    copy_file(dataset_csv_path + '/ingestedfiles.txt', prod_deployment_path + '/ingestedfiles.txt')
-    # with open(dataset_csv_path + '/ingestedfiles.txt', 'rb') as src, open(prod_deployment_path + '/ingestedfiles.txt', 'wb') as dest:
-    #     dest.write(src.read())
+    copy_file(os.path.join(dataset_csv_path, 'ingestedfiles.txt'),
+              os.path.join(prod_deployment_path, 'ingestedfiles.txt'))
         
 if __name__ == '__main__':
     store_model_into_pickle()

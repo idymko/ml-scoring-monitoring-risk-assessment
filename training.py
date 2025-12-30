@@ -35,12 +35,12 @@ def train_model():
                                 warm_start=False)
     
     #fit the logistic regression to your data
-    X = pd.read_csv(dataset_csv_path + '/finaldata.csv', index_col=0)
+    X = pd.read_csv(os.path.join(dataset_csv_path, 'finaldata.csv'), index_col=0)
     y = X.pop("exited")
     model.fit(X,y)
     
     #write the trained model to your workspace in a file called trainedmodel.pkl
-    pickle.dump(model, open(model_path + '/trainedmodel.pkl', 'wb'))
+    pickle.dump(model, open(os.path.join(model_path, 'trainedmodel.pkl'), 'wb'))
     
 
 if __name__ == '__main__':

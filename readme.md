@@ -184,3 +184,55 @@ You can write code that will accomplish all of these steps in scoring.py, which 
 Finally, you need to write a function that will deploy your model. You can write this function in the starter file called deployment.py.
 
 Your model deployment function will not create new files; it will only copy existing files. It will copy your trained model (trainedmodel.pkl), your model score (latestscore.txt), and a record of your ingested data (ingestedfiles.txt). It will copy all three of these files from their original locations to a production deployment directory. The location of the production deployment directory is specified in the prod_deployment_path entry of your config.json starter file.
+
+# Step 3: Model and Data Diagnostics
+
+Model and data diagnostics are important because they will help you find problems - if any exist - in your model and data. Finding and understanding any problems that might exist will help you resolve the problems quickly and make sure that your model performs as well as possible.
+
+In this step, you'll create a script that performs diagnostic tests related to your model as well as your data.
+
+## Starter File
+
+You can write the code for this step in the file called diagnostics.py. This file is contained in your collection of starter files.
+
+For this step, you'll also need the starter file called config.json. This file will specify the directories where you need to read and write files.
+
+## Model Predictions
+
+You need a function that returns predictions made by your deployed model.
+
+This function should take an argument that consists of a dataset, in a pandas DataFrame format. It should read the deployed model from the directory specified in the prod_deployment_path entry of your config.json file.
+
+The function uses the deployed model to make predictions for each row of the input dataset. Its output should be a list of predictions. This list should have the same length as the number of rows in the input dataset.
+
+## Summary Statistics
+
+You also need a function that calculates summary statistics on your data.
+
+The summary statistics you should calculate are means, medians, and standard deviations. You should calculate each of these for each numeric column in your data.
+
+This function should calculate these summary statistics for the dataset stored in the directory specified by output_folder_path in config.json. It should output a Python list containing all of the summary statistics for every numeric column of the input dataset.
+
+## Missing Data
+
+Next, you should write a function to check for missing data. By missing data, we mean NA values. Remember that the Pandas module has a custom method for checking whether a value is NA.
+
+Your function needs to count the number of NA values in each column of your dataset. Then, it needs to calculate what percent of each column consists of NA values.
+
+The function should count missing data for the dataset stored in the directory specified by output_folder_path in config.json. It will return a list with the same number of elements as the number of columns in your dataset. Each element of the list will be the percent of NA values in a particular column of your data.
+
+## Timing
+
+Next, you should create a function that times how long it takes to perform the important tasks of your project. The important tasks you need to time are: data ingestion (your ingestion.py script from Step 1) and model training (your training.py script from Step 2).
+
+This function doesn't need any input arguments. It should return a Python list consisting of two timing measurements in seconds: one measurement for data ingestion, and one measurement for model training.
+
+## Dependencies
+
+Python scripts, including the ones you've written for this project, usually depend on third-party modules. It's important to make sure that the modules you're importing are up-to-date.
+
+In this step, you'll write a function that checks the current and latest versions of all the modules that your scripts use (the current version is recorded in requirements.txt). It will output a table with three columns: the first column will show the name of a Python module that you're using; the second column will show the currently installed version of that Python module, and the third column will show the most recent available version of that Python module.
+
+To get the best, most authoritative information about Python modules, you should rely on Python's official package manager, pip. Your script should run a pip command in your workspace Terminal to get the information you need for this step.
+
+Note: Dependencies don’t need to be re-installed or changed, since this is just a check.
