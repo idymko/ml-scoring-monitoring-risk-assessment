@@ -8,9 +8,8 @@ from datetime import datetime
 def merge_multiple_dataframe():
     
     #############Load config.json and get input and output paths    
-    with open('config.json','r') as f:
-        config = json.load(f) 
-
+    config = json.load(open('config.json', 'r'))
+    
     input_folder_path = config['input_folder_path']
     output_folder_path = config['output_folder_path']
     
@@ -37,7 +36,6 @@ def merge_multiple_dataframe():
     # save to dataframe to csv file
     filepath = output_folder_path + '/finaldata.csv'
     data.to_csv(filepath, index=False)
-    print(f"combined data saved to {filepath}")
 
     with open(output_folder_path + '/ingestedfiles.txt', 'w') as file:
         file.write(ingestedfiles_content)

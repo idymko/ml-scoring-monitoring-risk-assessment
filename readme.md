@@ -236,3 +236,52 @@ In this step, you'll write a function that checks the current and latest version
 To get the best, most authoritative information about Python modules, you should rely on Python's official package manager, pip. Your script should run a pip command in your workspace Terminal to get the information you need for this step.
 
 Note: Dependencies don’t need to be re-installed or changed, since this is just a check.
+
+# Step 4: Model Reporting
+
+Model reporting is important because reporting allows us as data scientists to be aware of all aspects of our data, our model, and our training processes, as well as their performance. Also, automated reporting enables us to keep stakeholders and leaders quickly and reliably informed about our ML efforts.
+
+In this step, you'll write scripts that create reports related to your ML model, its performance, and related diagnostics.
+
+## Starter Files
+
+For this step, you're going to work with two scripts from our collection of starter files: `reporting.py` - which we'll use for generating plots, and `app.py` - which we'll use for API setup.
+
+## Generating Plots
+
+You need to update the `reporting.py` script so that it generates plots related to your ML model's performance.
+
+In order to generate plots, you need to call the model prediction function that you created diagnostics.py in Step 3. The function will use the test data from the directory specified in the test_data_path entry of your config.json starter file as input dateset. You can use this function to obtain a list of predicted values from your model.
+
+After you obtain predicted values and actual values for your data, you can use these to generate a confusion matrix plot. Your reporting.py script should save your confusion matrix plot to a file in your workspace called confusionmatrix.png. The `confusionmatrix.png` file can be saved in the directory specified in the `output_model_path` entry of your config.json file.
+
+## API Setup
+
+You need to set up an API using `app.py` so that you and your colleagues can easily access ML diagnostics and results. Your API needs to have four endpoints: 
+    
+* one for model predictions, 
+* one for model scoring, 
+* one for summary statistics, 
+* and one for other diagnostics.
+
+**Note**: Each of your endpoints should return an HTTP 200 status code.
+Prediction Endpoint
+
+You can set up a prediction endpoint at `/prediction`. This endpoint should take a dataset's file location as its input, and return the outputs of the prediction function you created in Step 3.
+
+## Scoring Endpoint
+
+You can set up a scoring endpoint at /scoring. This endpoint needs to run the scoring.py script you created in Step 2 and return its output.
+
+## Summary Statistics Endpoint
+
+You can set up a summary statistics endpoint at /summarystats. This endpoint needs to run the summary statistics function you created in Step 3 and return its outputs.
+
+
+## Diagnostics Endpoint
+
+You can set up a diagnostics endpoint at /diagnostics. This endpoint needs to run the timing, missing data, and dependency check functions you created in Step 3 and return their outputs.
+
+## Calling your API endpoints
+
+Work with the starter file called `apicalls.py`. This script should call each of your endpoints, combine the outputs, and write the combined outputs to a file call `apireturns.txt`. When you call the prediction endpoint, you can use the file `/testdata/testdata.csv` as your input, to get predictions on the test data. When you call the other endpoints, you don't need to specify any inputs. The `apireturns.txt` file can be saved in the directory specified in the `output_model_path` entry of your `config.json` file.

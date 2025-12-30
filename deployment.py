@@ -19,8 +19,7 @@ def store_model_into_pickle():
     # and the ingestedfiles.txt file into the deployment directory
         
     ##################Load config.json and correct path variable
-    with open('config.json','r') as f:
-        config = json.load(f) 
+    config = json.load(open('config.json', 'r'))
 
     model_path = os.path.join(config['output_model_path']) 
     dataset_csv_path = os.path.join(config['output_folder_path']) 

@@ -8,20 +8,13 @@ import pickle
 import subprocess
 
 ##################Function to get model predictions
-def model_predictions():
+def model_predictions(X):
     #read the deployed model and a test dataset, calculate predictions
-    with open('config.json','r') as f:
-        config = json.load(f)
-    test_data_path = os.path.join(config['test_data_path'])
+    config = json.load(open('config.json', 'r'))
     prod_deployment_path = os.path.join(config['prod_deployment_path'])
     
     model = pickle.load(open(os.path.join(prod_deployment_path, 'trainedmodel.pkl'), 'rb'))
-    X = pd.read_csv(os.path.join(test_data_path, 'testdata.csv'), index_col=0)
-    y = X.pop("exited")
     preds = model.predict(X)
-    
-    if len(y) != len(preds):
-        raise Exception("Len of y is not equal to len of preds!")
     
     return preds #return value should be a list containing all predictions
 
@@ -32,8 +25,7 @@ def dataframe_summary():
     # dataset stored in the directory specified by output_folder_path 
     # in config.json. It should output a Python list containing all of 
     # the summary statistics for every numeric column of the input dataset.
-    with open('config.json','r') as f:
-        config = json.load(f)
+    config = json.load(open('config.json', 'r'))
     dataset_csv_path = os.path.join(config['output_folder_path'], 'finaldata.csv') 
     data = pd.read_csv(dataset_csv_path, index_col=0)
     summary_stat = list(data.mean(axis=0))
@@ -55,8 +47,7 @@ def missing_data():
     It will return a list with the same number of elements as the number of columns in your dataset. 
     Each element of the list will be the percent of NA values in a particular column of your data.
     """
-    with open('config.json','r') as f:
-        config = json.load(f)
+    config = json.load(open('config.json', 'r'))
     dataset_csv_path = os.path.join(config['output_folder_path'], 'finaldata.csv') 
     data = pd.read_csv(dataset_csv_path, index_col=0)
     
@@ -89,32 +80,30 @@ def outdated_packages_list():
     outdated_packages = subprocess.check_output(['python', '-m', 'pip', 'list', '--outdated'], 
                                                 stderr=subprocess.STDOUT).decode().splitlines()[2:]
     
-    outdated_packages_df = pd.DataFrame(columns=['Package', 'Version', 'Latest'])
+    list_outdated_packages = []
     for package in outdated_packages:
-        
         package_info = package.split()
-        package_name = package_info[0]
-        current_version = package_info[1]
-        latest_version = package_info[2]
-        new_row = pd.DataFrame([[package_info[0], package_info[1],package_info[2]]], 
-                                columns=outdated_packages_df.columns)
-        outdated_packages_df = pd.concat([outdated_packages_df,new_row], ignore_index=True)
+        list_outdated_packages += [package_info[0], package_info[1],package_info[2]]
             
-    
-    return outdated_packages_df
+    return list_outdated_packages
 
 if __name__ == '__main__':
-    preds = model_predictions()
-    print(f"model predictions: {preds}")
+    
+    config = json.load(open('config.json', 'r'))
+    X = pd.read_csv(os.path.join(config['test_data_path'], 'testdata.csv'), index_col=0)
+    y = X.pop("exited")
+    
+    preds = model_predictions(X)
+    print(f"predictions: {preds}")
     
     df_summary = dataframe_summary()
-    print(f"data summary (mean, median, std) for each column: {df_summary}")
+    print(f"data_summary: {df_summary}")
     
     nan_percentage = missing_data()
-    print(f"percentage of NaN per column: {nan_percentage}")
+    print(f"percentage_NaN: {nan_percentage}")
     
     exe_time = execution_time()
-    print(f"execution time (ingest, train): {exe_time}")
+    print(f"execution_time: {exe_time}")
     
     outdated_packages = outdated_packages_list()
-    print(f"outdated packages\n{outdated_packages}")   
+    print(f"outdated_packages: {outdated_packages}")   
