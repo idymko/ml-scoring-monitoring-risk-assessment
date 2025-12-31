@@ -8,8 +8,12 @@ import pickle
 import subprocess
 
 ##################Function to get model predictions
-def model_predictions(X):
+def model_predictions(filename):
     #read the deployed model and a test dataset, calculate predictions
+    
+    df = pd.read_csv(filename)
+    X = df[['lastmonth_activity', 'lastyear_activity', 'number_of_employees']]
+    
     config = json.load(open('config.json', 'r'))
     prod_deployment_path = os.path.join(config['prod_deployment_path'])
     
@@ -90,10 +94,7 @@ def outdated_packages_list():
 if __name__ == '__main__':
     
     config = json.load(open('config.json', 'r'))
-    X = pd.read_csv(os.path.join(config['test_data_path'], 'testdata.csv'), index_col=0)
-    y = X.pop("exited")
-    
-    preds = model_predictions(X)
+    preds = model_predictions(os.path.join(config['test_data_path'], 'testdata.csv'))
     print(f"predictions: {preds}")
     
     df_summary = dataframe_summary()

@@ -18,7 +18,7 @@ def score_model():
     config = json.load(open('config.json', 'r'))
     X = pd.read_csv(os.path.join(config['test_data_path'], 'testdata.csv'), index_col=0)
     y = X.pop("exited")
-    preds = model_predictions(X)
+    preds = model_predictions(os.path.join(config['test_data_path'], 'testdata.csv'))
 
     # create confusion matrix
     confusion_matrix_path = config['output_model_path']

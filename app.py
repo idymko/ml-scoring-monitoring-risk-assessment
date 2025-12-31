@@ -16,9 +16,7 @@ app.secret_key = '1652d576-484a-49fd-913a-6879acfa6ba4'
 def predict():        
     #call the prediction function you created in Step 3
     filename = request.args.get('filename')
-    df = pd.read_csv(filename)
-    X = df[['lastmonth_activity', 'lastyear_activity', 'number_of_employees']]
-    preds = model_predictions(X)
+    preds = model_predictions(filename)
     return str(preds) #add return value for prediction outputs
 
 #######################Scoring Endpoint

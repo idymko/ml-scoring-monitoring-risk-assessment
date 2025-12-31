@@ -285,3 +285,83 @@ You can set up a diagnostics endpoint at /diagnostics. This endpoint needs to ru
 ## Calling your API endpoints
 
 Work with the starter file called `apicalls.py`. This script should call each of your endpoints, combine the outputs, and write the combined outputs to a file call `apireturns.txt`. When you call the prediction endpoint, you can use the file `/testdata/testdata.csv` as your input, to get predictions on the test data. When you call the other endpoints, you don't need to specify any inputs. The `apireturns.txt` file can be saved in the directory specified in the `output_model_path` entry of your `config.json` file.
+
+# Step 5: Process Automation
+
+Process automation is important because it will eliminate the need for you to manually perform the individual steps of the ML model scoring, monitoring, and re-deployment process.
+
+In this step, you'll create scripts that automate the ML model scoring and monitoring process.
+
+This step includes checking for the criteria that will require model re-deployment, and re-deploying models as necessary.
+
+The full process that you'll automate is shown in the following figure:
+
+![The model re-deployment process](images/fullprocess.jpg)
+
+The model re-deployment process
+
+## Starter File
+
+For this step, you can work with the starter file called fullprocess.py. Your fullprocess.py file will call functions from scripts that you wrote in previous steps, including deployment.py from Step 1.
+
+
+## Updating config.json
+
+The starter version of your config.json file contains an entry called input_folder_path with a value equal to /practicedata/. All of the training, scoring, and reporting in Steps 1 through 4 was accomplished relying on the contents of this directory. As the name "practicedata" suggests, this folder's datasets were provided to help you practice and test your scripts. Now that you've completed all of the scripts in Steps 1 through 4, we want to stop working with practice data and start working with production data. There's production data provided to you in your workspace in the folder called /sourcedata/.
+
+Changing from practice data to production data only requires changing one thing. You need to change the input_folder_path entry in your config.json file. Instead of /practicedata/, you need to change it to be /sourcedata/. Since all of your scripts read this value from config.json, making that one change will enable all of your scripts to work with this new, correct data instead of our practice data.
+
+In addition to changing your input_folder_path, you should also change your output_model_path. In the starter version of config.json, the value for this entry is set to /practicemodels/. You should change it to /models/ for storing production models instead of practice models.
+
+## Checking and Reading New Data
+
+The first part of your script needs to check whether any new data exists that needs to be ingested.
+
+You'll accomplish the check for new data in two steps:
+
+    Your script will have to read the file ingestedfiles.txt from the deployment directory, specified in the prod_deployment_path entry of your config.json file.
+    Your script will check the directory specified in the input_folder_path entry of config.json, and determine whether there are any files there that are not in the list from ingestedfiles.txt.
+
+If there are any files in the input_folder_path directory that are not listed in ingestedfiles.txt, then your script needs to run the code in ingestion.py to ingest all the new data.
+## Deciding Whether to Proceed (first time)
+
+If you found in the previous step that there is no new data, then there will be no way to train a new model, and so there will be no need to continue with the rest of the deployment process. Your script will only continue to the next step (checking for model drift) if you found and ingested new data in the previous step.
+## Checking for Model Drift
+
+The next part of your script needs to check for model drift. You can accomplish this with the following steps:
+
+    Read the score from the latest model, recorded in latestscore.txt from the deployment directory, specified in the prod_deployment_path entry of your config.json file.
+    Make predictions using the trainedmodel.pkl model in the /production_deployment directory and the most recent data you obtained from the previous "Checking and Reading New Data" step.
+    Get a score for the new predictions from step 2 by running the scoring.py.
+    Check whether the new score from step 3 is higher or lower than the score recorded in latestscore.txt in step 1 using the raw comparison test. If the score from step 3 is lower, then model drift has occurred. Otherwise, it has not.
+
+## Deciding Whether to Proceed (second time)
+
+If you found in the previous step that there is no model drift, then the current model is working well and there's no need to replace it, so there will be no need to continue with the rest of the deployment process. Your script will only continue to the next step (re-training and re-deployment) if you found evidence for model drift in the previous step.
+
+## Re-training
+
+Train a new model using the most recent data you obtained from the previous "Checking and Reading New Data" step. You can run training.py to complete this step. When you run training.py, a model trained on the most recent data will be saved to your workspace.
+Re-deployment
+
+To perform re-deployment, you need to run the script called deployment.py. The model you need to deploy is the model you saved when you ran training.py in the "Checking for Model Drift" section above.
+Diagnostics and Reporting
+
+The last part of your script should run the code from apicalls.py and reporting.py on the most recently deployed model (the model you deployed in the previous "re-deployment" section). When you run reporting.py, you'll create a new version of confusionmatrix.png, which will be saved in the /models/ directory. When you run apicalls.py, you'll create a new version of apireturns.txt, which will be saved in the /models/ directory. You should save these new versions for your final submission. When you prepare your final submission, you can change the names of these files to confusionmatrix2.png and apireturns2.txt, respectively, so they don't get confused with the previous files you created.
+
+## Cron Job for the Full Pipeline
+
+Now you have a script, fullprocess.py, that accomplishes all of the important steps in the model deployment, scoring, and monitoring process. But it's not enough just to have the script sitting in our workspace - we need to make sure the script runs regularly without manual intervention.
+
+To accomplish this, you'll write a crontab file that runs the fullprocess.py script one time every 10 min.
+
+To successfully install a crontab file that runs your fullprocess.py script, you need to make sure to do the following:
+
+    In the command line of your workspace, run the following command: service cron start
+    Open your workspace's crontab file by running crontab -e in your workspace's command line. Your workspace may ask you which text editor you want to use to edit the crontab file. You can select option 3, which corresponds to the "vim" text editor.
+    When you're using vim to edit the crontab, you need to press the "i" key to be able to insert a cron job.
+    After you write the cron job in the crontab file, you can save your work and exit vim by pressing the escape key, and then typing ":wq" , and then press Enter. This will save your one-line cron job to the crontab file and return you to the command line. If you want to view your crontab file after exiting vim, you can run crontab -l on the command line.
+
+You should save and submit a copy of the one-line cron job you wrote as "cronjob.txt" .
+
+Congratulations, you've completed the final step!
