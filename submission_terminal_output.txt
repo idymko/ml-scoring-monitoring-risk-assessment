@@ -1,0 +1,50 @@
+(mlproject) dkysylychyn@MacBookPro ml-scoring-monitoring-risk-assessment % python fullprocess.py 
+INFO:__main__:first_deployment=True
+INFO:__main__:PROCEED: new data files found=['dataset1.csv', 'dataset2.csv']
+INFO:ingestion:ingested data saved 'ingesteddata/finaldata.csv'
+INFO:ingestion:list of ingested files saved to 'ingesteddata/ingestedfiles.txt'
+INFO:__main__:training new model
+INFO:training:training performed on 'ingesteddata/finaldata.csv'
+INFO:training:trained model saved to 'practicemodels/trainedmodel.pkl'
+INFO:scoring:scoring model 'practicemodels/trainedmodel.pkl' on 'train' data 'ingesteddata/finaldata.csv'
+INFO:scoring:f1score=0.7647058823529411
+INFO:__main__:scoring new model
+INFO:scoring:scoring model 'practicemodels/trainedmodel.pkl' on 'test' data 'testdata/testdata.csv'
+INFO:scoring:f1score=0.5714285714285714
+INFO:scoring:f1score saved to file 'practicemodels/latestscore.txt'
+INFO:__main__:deploying new model
+INFO:deployment:deploy 'practicemodels/trainedmodel.pkl' to 'production_deployment/trainedmodel.pkl'
+INFO:deployment:deploy 'practicemodels/latestscore.txt' to 'production_deployment/latestscore.txt'
+INFO:deployment:deploy 'ingesteddata/ingestedfiles.txt' to 'production_deployment/ingestedfiles.txt'
+INFO:__main__:running reporting and APIs
+INFO:reporting:y_true=[1 0 0 1 1]
+INFO:reporting:y_pred=[0 1 1 1 1]
+INFO:apicalls:results of API calls saved to practicemodels/apireturns.txt
+(mlproject) dkysylychyn@MacBookPro ml-scoring-monitoring-risk-assessment % python fullprocess.py
+INFO:__main__:first_deployment=False
+INFO:__main__:PROCEED: new data files found=['dataset3.csv', 'dataset4.csv']
+INFO:ingestion:ingested data saved 'ingesteddata/finaldata.csv'
+INFO:ingestion:list of ingested files saved to 'ingesteddata/ingestedfiles.txt'
+INFO:__main__:latestscore=0.7647058823529411
+INFO:scoring:scoring model 'production_deployment/trainedmodel.pkl' on 'prod' data 'ingesteddata/finaldata.csv'
+INFO:scoring:f1score=0.6923076923076923
+INFO:__main__:newscore=0.6923076923076923
+INFO:__main__:PROCEED: new model score has decreased according to the raw test
+INFO:__main__:training new model
+INFO:training:training performed on 'ingesteddata/finaldata.csv'
+INFO:training:trained model saved to 'models/trainedmodel.pkl'
+INFO:scoring:scoring model 'models/trainedmodel.pkl' on 'train' data 'ingesteddata/finaldata.csv'
+INFO:scoring:f1score=0.5454545454545454
+INFO:__main__:scoring new model
+INFO:scoring:scoring model 'models/trainedmodel.pkl' on 'test' data 'testdata/testdata.csv'
+INFO:scoring:f1score=0.3333333333333333
+INFO:scoring:f1score saved to file 'models/latestscore.txt'
+INFO:__main__:deploying new model
+INFO:deployment:deploy 'models/trainedmodel.pkl' to 'production_deployment/trainedmodel.pkl'
+INFO:deployment:deploy 'models/latestscore.txt' to 'production_deployment/latestscore.txt'
+INFO:deployment:deploy 'ingesteddata/ingestedfiles.txt' to 'production_deployment/ingestedfiles.txt'
+INFO:__main__:running reporting and APIs
+INFO:reporting:y_true=[1 0 0 1 1]
+INFO:reporting:y_pred=[0 1 1 0 1]
+INFO:apicalls:results of API calls saved to models/apireturns.txt
+(mlproject) dkysylychyn@MacBookPro ml-scoring-monitoring-risk-assessment % 
