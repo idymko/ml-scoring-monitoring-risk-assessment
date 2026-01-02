@@ -1,4 +1,4 @@
-(mlproject) dkysylychyn@MacBookPro ml-scoring-monitoring-risk-assessment % python fullprocess.py 
+(mlproject) ml-scoring-monitoring-risk-assessment % python fullprocess.py 
 INFO:__main__:first_deployment=True
 INFO:__main__:PROCEED: new data files found=['dataset1.csv', 'dataset2.csv']
 INFO:ingestion:ingested data saved 'ingesteddata/finaldata.csv'
@@ -20,7 +20,8 @@ INFO:__main__:running reporting and APIs
 INFO:reporting:y_true=[1 0 0 1 1]
 INFO:reporting:y_pred=[0 1 1 1 1]
 INFO:apicalls:results of API calls saved to practicemodels/apireturns.txt
-(mlproject) dkysylychyn@MacBookPro ml-scoring-monitoring-risk-assessment % python fullprocess.py
+
+(mlproject) ml-scoring-monitoring-risk-assessment % python fullprocess.py
 INFO:__main__:first_deployment=False
 INFO:__main__:PROCEED: new data files found=['dataset3.csv', 'dataset4.csv']
 INFO:ingestion:ingested data saved 'ingesteddata/finaldata.csv'
