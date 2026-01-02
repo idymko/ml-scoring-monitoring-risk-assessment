@@ -1,1 +1,0 @@
-*/10 * * * * /bin/bash -lc 'cd ~/python/MLDevOps/ml-scoring-monitoring-risk-assessment && ~/miniconda3/envs/mlproject/bin/python fullprocess.py'
